@@ -1,0 +1,228 @@
+program new;
+{$DEFINE SCRIPT_GUI}
+{$I WaspLib/osr.simba}
+
+{$IFDEF SCRIPT_GUI}
+type 
+  TMyScriptForm = record(tScriptForm)
+    NewCombobox: tLabeledComboBox;
+    NewListbox: tLabeledListBox;
+    NewEdit: tLabeledEdit;
+    NewEdit2: tLabeledEdit;
+    NewButton: tButton;
+    NewButton2: tButton;
+    NewCheckbox: tLabeledCheckbox;
+    NewCheckbox2: tLabeledCheckbox;
+    NewCheckbox22: tLabeledCheckbox;
+    NewMemo: tLabeledMemo;
+end;
+function TTabSheet.CreateComboBox(Name, Caption: String; TopLeft : tPoint; Width : Int32; Items : tStringArray = []; Style : TComboBoxStyle = csDropDownList) : tLabeledComboBox;
+var
+  item : String;
+begin
+  Result.Create(Self);
+  Result.SetName(Name);
+
+  // Alignment
+  Result.SetLeft(TControl.AdjustToDPI(TopLeft.X));
+  Result.SetTop(TControl.AdjustToDPI(TopLeft.Y));
+  Result.SetWidth(TControl.AdjustToDPI(Width));
+  Result.SetHeight(TControl.AdjustToDPI(42));
+
+  // Contents
+  Result.SetCaption(Caption);
+  if Length(Items) > 0 then
+  begin
+    {$H-}for item in Items do{$H+}
+      Result.ComboBox.GetItems.Add(trim(item));
+
+    Result.ComboBox.SetItemIndex(0);
+  end;
+
+  Result.ComboBox.SetStyle(Style);
+end;
+
+function TTabSheet.CreateListBox(Name, Caption: String; TopLeft : tPoint; Width, Height : Int32; Items : tStringArray = []; Style : TListBoxStyle = lbStandard) : tLabeledListBox;
+var
+  item : String;
+begin
+  Result.Create(Self);
+  Result.SetName(Name);
+
+  // Alignment
+  Result.SetLeft(TControl.AdjustToDPI(TopLeft.X));
+  Result.SetTop(TControl.AdjustToDPI(TopLeft.Y));
+  Result.SetWidth(TControl.AdjustToDPI(Width));
+  Result.SetHeight(TControl.AdjustToDPI(Height));
+
+  // Contents
+  Result.SetCaption(Caption);
+  if Length(Items) > 0 then
+  begin
+    {$H-}for item in Items do{$H+}
+      Result.ListBox.GetItems.Add(trim(item));
+
+    //Result.ListBox.SetItemIndex(0);
+  end;
+
+  Result.ListBox.SetStyle(Style);
+end;
+
+function TTabSheet.CreateButton(Name, Caption, Tooltip : String; TopLeft : tPoint; Width, Height : Int32) : tButton;
+begin
+  Result.Create(Self);
+  Result.SetName(Name);
+
+  // Alignment
+  Result.SetLeft(TControl.AdjustToDPI(TopLeft.X));
+  Result.SetTop(TControl.AdjustToDPI(TopLeft.Y));
+  Result.SetWidth(TControl.AdjustToDPI(Width));
+  Result.SetHeight(TControl.AdjustToDPI(Height));
+
+  // Contents
+  Result.SetCaption(Caption);
+  Result.SetTooltip(Tooltip);
+end;
+
+function TTabSheet.CreateEdit(Name, Caption, Text, Tooltip: String; TopLeft : tPoint; Width : Int32; MaxLength : Int32 = -1) : tLabeledEdit;
+begin
+  Result.Create(Self);
+  Result.SetName(Name);
+
+  // Alignment
+  Result.SetLeft(TControl.AdjustToDPI(TopLeft.X));
+  Result.SetTop(TControl.AdjustToDPI(TopLeft.Y));
+  Result.SetWidth(TControl.AdjustToDPI(Width));
+  Result.SetHeight(TControl.AdjustToDPI(42));
+
+  // Contents
+  Result.SetCaption(Caption);
+  Result.SetText(Text);
+  Result.SetTooltip(Tooltip);
+
+  if MaxLength > 0 then
+    Result.SetMaxLength(MaxLength);
+end;
+
+function TTabSheet.CreateCheckBox(Name, Caption, Tooltip: String; TopLeft : tPoint; Checked : Boolean = True) : tLabeledCheckbox;
+begin
+  Result.Create(Self);
+  Result.SetName(Name);
+
+  // Alignment
+  Result.SetLeft(TControl.AdjustToDPI(TopLeft.X));
+  Result.SetTop(TControl.AdjustToDPI(TopLeft.Y));
+
+  // Contents
+  Result.SetCaption(Caption);
+  Result.SetTooltip(Tooltip);
+  Result.SetChecked(Checked);
+end;
+
+function TTabSheet.CreateLabeledPanel(Caption: String; TopLeft : tPoint; Width, Height, FontSize : Int32; Color : tColor = 0; FontStyles: TFontStyles = []) : tLabeledPanel;
+begin
+  Result.Create(Self);
+  Result.Caption.SetCaption(Caption);
+
+  // Alignment
+  Result.SetLeft(TControl.AdjustToDPI(TopLeft.X));
+  Result.SetTop(TControl.AdjustToDPI(TopLeft.Y));
+  Result.SetWidth(TControl.AdjustToDPI(Width));
+  Result.SetHeight(TControl.AdjustToDPI(Height));
+
+  // Font
+  Result.Caption.SetFontSize(FontSize);
+  Result.Caption.SetFontColor(color);
+  if FontStyles <> [] then
+    Result.Caption.getFont().setStyle(FontStyles);
+end;
+
+function TTabSheet.CreatePanel(TopLeft : tPoint; Width, Height : Int32) : tPanel;
+begin
+  Result.Create(Self);
+
+  // Alignment
+  Result.SetLeft(TControl.AdjustToDPI(TopLeft.X));
+  Result.SetTop(TControl.AdjustToDPI(TopLeft.Y));
+  Result.SetWidth(TControl.AdjustToDPI(Width));
+  Result.SetHeight(TControl.AdjustToDPI(Height));
+end;
+
+function TTabSheet.CreateLabeledMemo(Name, Caption, Memo: String; TopLeft : tPoint; Width, Height, CaptionFontSize, MemoFontSize : Int32; CaptionColor, MemoColor : tColor; CaptionFontStyles, MemoFontStyles: TFontStyles) : tLabeledMemo;
+begin
+  Result.Create(Self);
+  Result.SetName(Name);
+
+  // Alignment
+  Result.SetLeft(TControl.AdjustToDPI(TopLeft.X));
+  Result.SetTop(TControl.AdjustToDPI(TopLeft.Y));
+  Result.SetWidth(TControl.AdjustToDPI(Width));
+  Result.SetHeight(TControl.AdjustToDPI(Height));
+
+  //Caption
+  Result.Caption.SetCaption(Caption);
+  Result.Caption.SetFontSize(CaptionFontSize);
+  Result.Caption.SetFontColor(CaptionColor);
+  if CaptionFontStyles <> [] then
+    Result.Caption.getFont().setStyle(CaptionFontStyles);
+
+  //Memo
+  Result.Memo.setText(Memo);
+  Result.Memo.SetFontSize(MemoFontSize);
+  Result.Memo.SetFontColor(MemoColor);
+  if MemoFontStyles <> [] then
+    Result.Memo.getFont().setStyle(MemoFontStyles);
+end;
+procedure TMyScriptForm.CreateSettings();
+var
+  CurrentTab : tTabSheet;
+begin
+  Self.AddTab('Settings');
+  CurrentTab := Self.Tabs[high(self.Tabs)];
+
+  NewCombobox := CurrentTab.CreateComboBox('new_combobox', 'New Combobox', Point(286, 130), 100, ['Item1', 'Item2', 'Item3'], csDropDownList);
+
+  NewListbox := CurrentTab.CreateListBox('new_listbox', 'New Listbox', Point(416, 286), 100, 50, ['Item1', 'Item2', 'Item3'], lbStandard);
+
+  NewEdit := CurrentTab.CreateEdit('new_edit', 'New Edit', 'Text', '', Point(52, 26), 100, 0);
+  NewEdit2 := CurrentTab.CreateEdit('new_edit2', 'New Edit', 'Text', '', Point(468, 156), 100, 0);
+
+  NewButton := CurrentTab.CreateButton('new_button', 'New Button', '', Point(208, 208), 100, 50);
+  NewButton2 := CurrentTab.CreateButton('new_button2', 'New Button', '', Point(520, 208), 100, 50);
+
+  NewCheckbox := CurrentTab.CreateCheckBox('new_checkbox', 'New Checkbox', '', Point(156, 208), True);
+  NewCheckbox2 := CurrentTab.CreateCheckBox('new_checkbox2', 'New Checkbox', '', Point(156, 182), True);
+  NewCheckbox22 := CurrentTab.CreateCheckBox('new_checkbox22', 'New Checkbox', '', Point(130, 260), True);
+
+  NewMemo := CurrentTab.CreateLabeledMemo('new_memo', 'New Memo', 'Text', Point(104, 312), 100, 50, 12, 10, 0, 0, [], []);
+end;
+procedure TMyScriptForm.StartScript(sender: TObject); override;
+begin
+  inherited; //This is important if you use TScript.Setup().
+
+  //Read your script options.
+end;
+
+procedure TMyScriptForm.Run(); override;
+var
+  tab: TTabSheet;
+begin
+  Self.Setup('HELLO WORLD SCRIPT');
+  Self.Start.setOnClick(@Self.StartScript);
+
+  Self.CreateSettings();
+
+  inherited;
+end;
+
+var
+  MyScriptForm: TMyScriptForm;
+{$ENDIF}
+
+begin
+  {$IFDEF SCRIPT_GUI}
+  MyScriptForm.Run();
+  {$ENDIF}
+
+  //RUN SCRIPT HERE!
+end.
